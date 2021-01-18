@@ -1,7 +1,7 @@
 import os
 import csv
 
-csvpath = os.path.join('..', 'employee_data.csv').replace("\\","/")
+csvpath = os.path.join('PyBoss/Resources/employee_data.csv').replace("\\","/")
 
 first_name= []
 last_name= []
