@@ -3,9 +3,9 @@ import os
 import csv
 
 #Input file path
-csvpath = os.path.join('Resources','employee_data.csv').replace("\\","/")
+csvpath = os.path.join('Resources','employee_data.csv')
 
-#Declare variables
+# List to store data
 
 name = []
 first_name= []
@@ -13,9 +13,8 @@ last_name= []
 dob_ymd= []
 dob_mdy= []
 ssn= []
-ssn_hedden= []
-state =[]
-state2 =[]
+ssn_hidden= []
+abbrev =[]
 emp_id =[]
 
 # Dictionary containing states names as keys and abbreviations as values (provided) 
@@ -73,15 +72,53 @@ us_state_abbrev = {
     'Wyoming': 'WY',
 }
 
-with open(csvpath) as csvfile:
-    csvreader = csv.reader(csvfile, delimiter=",")
+with open(csvpath, newline = '', encoding = 'utf-8') as csvfile:
+  csvreader = csv.reader(csvfile, delimiter=',')
 
-    #skip the headerr
-    header = next(csvreader)
+    #skip the header
+  header = next(csvreader)
 
 
   # Iterate through each row
 
-    for row in csvreader:    
-      #  Append employee id's into list
-      emp_id.append(row[0])
+  for row in csvreader:    
+      #  Append variables into list
+        emp_id.append(row[0])
+      
+        dob_ymd.append(row[2])   
+
+      # Split full name into first and last name
+        name = row[1].split(" ")
+        first_name = first_name + [name[0]]     
+        last_name = last_name + [name[1]]
+
+      #Append and format DOB
+        for i in dob_ymd:
+            y = i.split('-')[0]
+            m = i.split('-')[1]
+            d = i.split('-')[2]
+            dob_mdy.append(f'{m}/{d}/{y}')
+            #print(dob_mdy)
+      # Append and format ssn
+        ssn = row[3].split("-")
+        ssn_hidden.append("***-**-" + ssn[2])
+      ## append  and format state
+        abbrev.append(us_state_abbrev[row[4]])
+
+      # zip lists together
+        cleaned_csv = zip(emp_id, first_name, last_name, dob_mdy, ssn_hidden, abbrev)
+
+      # set variable for output file
+        output_file = os.path.join("employee_data_final.csv")
+
+      # open the output file
+with open (output_file, "w", newline ='', encoding = 'utf-8') as datafile:
+  writer = csv.writer(datafile)
+
+    # write the header row
+  writer.writerow (["Emp ID","First Name","Last Name","DOB","SSN","State"])
+    # write in zipped rows
+  writer.writerow(cleaned_csv)
+
+
+      
