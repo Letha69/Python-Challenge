@@ -1,11 +1,11 @@
 # Script for PyBank analysis
-
+#
 import os
 import csv
 
 csvpath = os.path.join('budget_data.csv').replace("\\","/")
 
-final_profit = []
+
 profit = []
 monthly_changes= []
 date = []
@@ -15,8 +15,14 @@ count = 0
 total_profit = 0
 total_change_profits = 0
 monthly_change_profits = 0
-initial_profit = 0
+final_profit = 0
 
+#total_change_profits = sum(monthly_change_profits)
+#total_variables = len(str(monthly_change_profits))
+#if total_change_profits= 0:
+ # average_change_profits= 0
+#else:
+  #average_change_profits = total_change_profits/total_variables
 
 with open(csvpath) as csvfile:
     csvreader = csv.reader(csvfile, delimiter=",")
@@ -33,19 +39,21 @@ with open(csvpath) as csvfile:
       profit.append(row[1])
       total_profit = total_profit + int(row[1])
 
+      
       #Calculate the average change in profits from month to month. Then calulate the average change in profits
-      final_profit = int(row[1])
-
-      monthly_change_profits = final_profit- initial_profit
+      initial_profit = int(row[1])
+    
+      monthly_change_profits = initial_profit- final_profit
 
       #Store these monthly changes in a list    
       monthly_changes.append(monthly_change_profits)
 
       total_change_profits = total_change_profits + monthly_change_profits
-      initial_profit = final_profit
+      final_profit = initial_profit
 
 
       #Calculate the average change in profits
+      
       average_change_profits = (total_change_profits/count)
 
                
